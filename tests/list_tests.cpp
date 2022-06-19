@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include<iostream>
-#include "catch.hpp"
+#include "../include/catch.hpp"
 #include "list.h"
 
 TEST_CASE("add")

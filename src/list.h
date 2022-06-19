@@ -75,16 +75,16 @@ public:
             return;
         }
 
-        Node<T> *previous, *temporary;
-        previous = head;
-        temporary = head->next;
+        Node<T> *previous = head;
+        Node<T> *temporary = head->next;
         while (temporary != NULL && temporary->item != item)
         {
             previous = previous->next;
             temporary = temporary->next;
         }
 
-        if (temporary != NULL) {
+        if (temporary != NULL)
+        {
             previous->next = temporary->next;
             if (temporary == tail)
             {
@@ -104,7 +104,7 @@ public:
             return false;
         }
 
-        Node<T> *temporary = head;
+        Node<T> *temporary;
         while (temporary != NULL)
         {
             if (temporary->item == item)
