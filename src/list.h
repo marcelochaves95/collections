@@ -118,7 +118,7 @@ public:
 
     bool is_empty() const
     {
-        return head == 0;
+        return head == NULL;
     }
 
     T& first()
