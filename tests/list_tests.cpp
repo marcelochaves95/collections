@@ -25,8 +25,8 @@ TEST_CASE("remove")
     list.add(95);
     list.remove(2);
 
-    bool contains = !list.contains(2);
-    REQUIRE(contains);
+    bool contains = list.contains(2);
+    REQUIRE(!contains);
 };
 
 TEST_CASE("contains")
@@ -50,8 +50,8 @@ TEST_CASE("is_empty")
     list.remove(2);
     list.remove(4);
 
-    bool is_empty = list.is_empty();
-    REQUIRE(is_empty);
+    bool isEmpty = list.is_empty();
+    REQUIRE(isEmpty);
 };
 
 TEST_CASE("first")
@@ -99,6 +99,6 @@ TEST_CASE("clear")
     list.add(95);
     list.clear();
 
-    bool is_empty = list.is_empty();
-    REQUIRE(is_empty);
+    bool isEmpty = list.is_empty();
+    REQUIRE(isEmpty);
 };
