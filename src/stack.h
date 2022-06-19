@@ -28,7 +28,6 @@ public:
         if (is_empty())
         {
             std::cout << "The stack is empty." << std::endl;
-            return;
         }
 
         T item = list.last();
@@ -38,6 +37,11 @@ public:
 
     T& peek()
     {
+        if (is_empty())
+        {
+            std::cout << "The stack is empty." << std::endl;
+        }
+
         return list.last();
     }
 
