@@ -1,34 +1,35 @@
-#ifndef LIST
-#define LIST
+#pragma once
+
+#include <iostream>
 
 template<class T>
-class list
+class List
 {
 private:
     template<typename TNode>
-    struct node
+    struct Node
     {
         TNode item;
-        node *next;
+        Node *next;
 
-        node(const TNode& item)
+        Node(const TNode& item)
         {
             this->item = item;
             this->next = NULL;
         }
     };
 
-    node<T> *head;
-    node<T> *tail;
+    Node<T> *head;
+    Node<T> *tail;
     int size = 0;
 public:
-    list()
+    List()
     {
         head = NULL;
         tail = NULL;
     }
 
-    ~list() {
+    ~List() {
         clear();
     }
 
@@ -36,13 +37,13 @@ public:
     {
         if (is_empty())
         {
-            head = new node<T>(item);
+            head = new Node<T>(item);
             tail = head;
             size++;
             return;
         }
 
-        tail->next = new node<T>(item);
+        tail->next = new Node<T>(item);
         tail = tail->next;
         size++;
     }
@@ -65,14 +66,14 @@ public:
 
         if (item == head->item)
         {
-            node<T> *tmp = head;
+            Node<T> *temporary = head;
             head = head->next;
-            delete tmp;
+            delete temporary;
             size--;
             return;
         }
 
-        node<T> *previous, *temporary;
+        Node<T> *previous, *temporary;
         previous = head;
         temporary = head->next;
         while (temporary != NULL && temporary->item != item)
@@ -99,7 +100,7 @@ public:
             std::cout << "Empty is list." << std::endl;
         }
 
-        node<T> *temporary = head;
+        Node<T> *temporary = head;
         while (temporary != NULL)
         {
             if (temporary->item == item)
@@ -140,7 +141,7 @@ public:
 
     void clear()
     {
-        node<T> *node;
+        Node<T> *node;
         while (!is_empty())
         {
             node = head->next;
@@ -149,5 +150,3 @@ public:
         }
     }
 };
-
-#endif
