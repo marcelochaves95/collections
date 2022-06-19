@@ -1,257 +1,152 @@
 #ifndef LIST
 #define LIST
 
-template <typename T>
-struct listNode { 
-  T item;
-  int index;
-  listNode *next;
-
-  listNode()
-  {
-    next = 0;
-  }
-
-  listNode(const T& item, int index, listNode *next = 0)
-  {
-    this->item = item;
-    this->index;
-    this->next = next;
-  }
-};
-
 template<class T>
 class list
 {
-protected:
-    listNode<T> *first;
-    listNode<T> *last;
+private:
+    template<typename TNode>
+    struct node
+    {
+        TNode item;
+        node *next;
+
+        node(const TNode& item)
+        {
+            this->item = item;
+            this->next = NULL;
+        }
+    };
+
+    node<T> *head;
+    node<T> *tail;
+    int size = 0;
 public:
     list()
     {
-      first = 0;
-      last = 0;
+        head = NULL;
+        tail = NULL;
     }
 
     ~list() {
-      clear();
+        clear();
     }
 
     void add(const T& item)
     {
-      if (empty())
-      {
-        first->next = new listNode<T>(item, 0);
-        return;
-      }
-
-      last->next = new listNode<T>(item, last->index);
-      last = last->next;
-    }
-
-    // TODO: This needs to be implemented
-    void insert(const int& index, const T& item)
-    {
-      if (index < 0 || index > last->index)
-      {
-        throw("Index out of range of list.");
-      }
-
-      if (index < first->index)
-      {
-        first = new listNode<T>(item, 0);
-        if (last == 0)
+        if (is_empty())
         {
-          last = first;
+            head = new node<T>(item);
+            tail = head;
+            size++;
+            return;
         }
-        return;
-      }
-      
+
+        tail->next = new node<T>(item);
+        tail = tail->next;
+        size++;
     }
 
     void remove(const T& item)
     {
-      if (empty())
-      {
-        throw("Empty is list.");
-      }
-
-      if (first == last && item == first->item)
-      {
-        delete first;
-        first = 0;
-        last = 0;
-        return;
-      }
-
-      if (item == first->item)
-      {
-        listNode<T> *tmp = first;
-        first = first->next;
-        delete tmp;
-        return;
-      }
-
-      listNode<T> *previous, *tmp;
-      previous = first;
-      tmp = first->next;
-      while (tmp != 0 && tmp->item != item)
-      {
-        previous = previous->next;
-        tmp = tmp->next;
-      }
-      
-      if (tmp != 0) {
-          previous->next = tmp->next;
-          if (tmp == last)
-          {
-            last = previous;
-          }
-      }
-      delete tmp;
-    }
-
-    void remove_at(const int& index)
-    {
-      if (empty())
-      {
-        throw("Empty is list.");
-      }
-
-      if (index < first->index || index > last->index)
-      {
-        throw("Index out of range of list.");
-      }
-
-      if (first == last)
-      {
-        delete first;
-        first = 0;
-        last = 0;
-        return;
-      }
-
-      if (index == first->index)
-      {
-        listNode<T> *tmp = first;
-        first = first->next;
-        delete tmp;
-        return;
-      }
-
-      listNode<T> *previous, *tmp;
-      previous = first;
-      tmp = first->next;
-      while (tmp != 0 && tmp->index != index)
-      {
-        previous = previous->next;
-        tmp = tmp->next;
-      }
-      
-      if (tmp != 0) {
-          previous->next = tmp->next;
-          if (tmp == last)
-          {
-            last = previous;
-          }
-      }
-      delete tmp;
-    }
-
-    void clear()
-    {
-      listNode<T> *node;
-      while (!empty())
-      {
-        node = first->next;
-        delete first;
-        first = node;
-      }
-    }
-
-    T& find(const int& index)
-    {
-      if (empty())
-      {
-        throw("Empty is list.");
-      }
-
-      listNode<T> *tmp = first;
-      while(tmp != 0)
-      {
-        if (tmp->index == index)
+        if (is_empty())
         {
-          return tmp->item;
+            std::cout << "Empty is list." << std::endl;
         }
-        tmp = tmp->next;
-      }
 
-      return 0;
-    }
+        if (head == tail && item == head->item)
+        {
+            delete head;
+            head = NULL;
+            tail = NULL;
+            size--;
+            return;
+        }
 
-    T& begin() const
-    {
-      return first;
-    }
+        if (item == head->item)
+        {
+            node<T> *tmp = head;
+            head = head->next;
+            delete tmp;
+            size--;
+            return;
+        }
 
-    T& end() const
-    {
-      return last;
+        node<T> *previous, *temporary;
+        previous = head;
+        temporary = head->next;
+        while (temporary != NULL && temporary->item != item)
+        {
+            previous = previous->next;
+            temporary = temporary->next;
+        }
+
+        if (temporary != NULL) {
+            previous->next = temporary->next;
+            if (temporary == tail)
+            {
+                tail = previous;
+            }
+            size--;
+        }
+        delete temporary;
     }
 
     bool contains(const T& item)
     {
-      if (empty())
-      {
-        throw("Empty is list.");
-      }
-
-      listNode<T> *tmp = first;
-      while (tmp != 0)
-      {
-        if (tmp->item == item)
+        if (is_empty())
         {
-          return true;
+            std::cout << "Empty is list." << std::endl;
         }
 
-        tmp = tmp->next;
-      }
+        node<T> *temporary = head;
+        while (temporary != NULL)
+        {
+            if (temporary->item == item)
+            {
+                return true;
+            }
 
-      return false;
+            temporary = temporary->next;
+        }
+
+        return false;
     }
 
-    int index_of(const T& item)
+    bool is_empty() const
     {
-      if (empty())
-      {
-        throw("Empty is list.");
-      }
+        return head == 0;
+    }
 
-      listNode<T> *tmp = first;
-      while (tmp != 0)
-      {
-        if (tmp->item == item)
-        {
-          return tmp->index;
-        }
+    T& first()
+    {
+        return head->item;
+    }
 
-        tmp = tmp->next;
-      }
+    T& last()
+    {
+        return tail->item;
     }
 
     int count() const
     {
-      if (empty())
-      {
-        return 0;
-      }
+        if (is_empty())
+        {
+            return 0;
+        }
 
-      return last->index;
+        return size;
     }
 
-    bool empty() const
+    void clear()
     {
-      return first == 0;
+        node<T> *node;
+        while (!is_empty())
+        {
+            node = head->next;
+            delete head;
+            head = node;
+        }
     }
 };
 
