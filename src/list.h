@@ -96,6 +96,29 @@ public:
         delete temporary;
     }
 
+    void remove_last()
+    {
+        if (head == tail)
+        {
+            delete head;
+            head = NULL;
+            tail = NULL;
+            size--;
+            return;
+        }
+
+        Node<T> *temporary = head;
+        while (temporary->next != tail)
+        {
+            temporary = temporary->next;
+        }
+
+        delete tail;
+        tail = temporary;
+        tail->next = NULL;
+        size--;
+    }
+
     bool contains(const T& item)
     {
         if (is_empty())
@@ -125,11 +148,21 @@ public:
 
     T& first()
     {
+        if (is_empty())
+        {
+            std::cout << "The list is empty." << std::endl;
+        }
+
         return head->item;
     }
 
     T& last()
     {
+        if (is_empty())
+        {
+            std::cout << "The list is empty." << std::endl;
+        }
+
         return tail->item;
     }
 
