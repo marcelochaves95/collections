@@ -29,6 +29,18 @@ TEST_CASE("remove")
     REQUIRE(!contains);
 };
 
+TEST_CASE("remove_last")
+{
+    List<int> list;
+
+    list.add(4);
+    list.add(3);
+    list.remove_last();
+
+    int last = list.last();
+    REQUIRE(last == 4);
+};
+
 TEST_CASE("contains")
 {
     List<std::string> list;
