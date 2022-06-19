@@ -29,7 +29,8 @@ public:
         tail = NULL;
     }
 
-    ~List() {
+    ~List()
+    {
         clear();
     }
 
@@ -91,6 +92,7 @@ public:
             }
             size--;
         }
+
         delete temporary;
     }
 
