@@ -53,7 +53,7 @@ public:
     {
         if (is_empty())
         {
-            std::cout << "Empty is list." << std::endl;
+            std::cout << "The list is empty." << std::endl;
             return;
         }
 
@@ -100,7 +100,7 @@ public:
     {
         if (is_empty())
         {
-            std::cout << "Empty is list." << std::endl;
+            std::cout << "The list is empty." << std::endl;
             return false;
         }
 
