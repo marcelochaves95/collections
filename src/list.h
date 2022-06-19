@@ -104,7 +104,7 @@ public:
             return false;
         }
 
-        Node<T> *temporary;
+        Node<T> *temporary = head;
         while (temporary != NULL)
         {
             if (temporary->item == item)
