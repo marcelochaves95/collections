@@ -30,7 +30,7 @@ public:
             std::cout << "The stack is empty." << std::endl;
         }
 
-        T item = list.last();
+        T& item = list.last();
         list.remove_last();
         return item;
     }
@@ -57,7 +57,7 @@ public:
 
     int count() const
     {
-        list.count();
+        return list.count();
     }
 
     void clear()
