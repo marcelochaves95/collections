@@ -53,6 +53,7 @@ public:
         if (is_empty())
         {
             std::cout << "Empty is list." << std::endl;
+            return;
         }
 
         if (head == tail && item == head->item)
@@ -98,6 +99,7 @@ public:
         if (is_empty())
         {
             std::cout << "Empty is list." << std::endl;
+            return false;
         }
 
         Node<T> *temporary = head;
