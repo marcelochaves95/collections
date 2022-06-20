@@ -2,6 +2,6 @@
 Generic algorithms &amp; data structures.
 
 ## Docs
-- [list](https://github.com/marcelochaves95/collections/blob/main/docs/list.md#list)
-- [stack](https://github.com/marcelochaves95/collections/blob/main/docs/stack.md#stack)
-- [queue](https://github.com/marcelochaves95/collections/blob/main/docs/queue.md#queue)
+- [List](https://github.com/marcelochaves95/collections/blob/main/docs/list.md#list)
+- [Stack](https://github.com/marcelochaves95/collections/blob/main/docs/stack.md#stack)
+- [Queue](https://github.com/marcelochaves95/collections/blob/main/docs/queue.md#queue)
