@@ -1,5 +1,5 @@
 # Collections
-Generic algorithms &amp; data structures.
+Generic data structures.
 
 ## Docs
 - [List](https://github.com/marcelochaves95/collections/blob/main/docs/list.md#list)
