@@ -29,6 +29,18 @@ TEST_CASE("remove")
     REQUIRE(!contains);
 };
 
+TEST_CASE("remove_first")
+{
+    List<int> list;
+
+    list.add(4);
+    list.add(3);
+    list.remove_first();
+
+    int first = list.first();
+    REQUIRE(first == 3);
+};
+
 TEST_CASE("remove_last")
 {
     List<int> list;
