@@ -96,6 +96,26 @@ public:
         delete temporary;
     }
 
+    void remove_first()
+    {
+        if (is_empty())
+        {
+            std::cout << "The list is empty." << std::endl;
+            return;
+        }
+
+        if (head == tail)
+        {
+            head = NULL;
+            tail = NULL;
+            size--;
+            return;
+        }
+
+        head = head->next;
+        size--;
+    }
+
     void remove_last()
     {
         if (head == tail)
