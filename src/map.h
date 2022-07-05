@@ -77,28 +77,6 @@ class Map {
         }
     }
 
-    TValue* get_value(TKey key)
-    {
-        int index = this->hash(key);
-        if (index == this->DEFAULT_VALUE.index)
-        {
-            return new TValue();
-        }
-
-        return &this->table[index].value;
-    }
-    
-    bool contains(TKey key)
-    {
-        int index = this->hash(key);
-        if (index == this->DEFAULT_VALUE.index)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     bool add(TKey key, TValue value)
     {
         if (this->is_table_full())
@@ -146,6 +124,28 @@ class Map {
 
         this->table[index] = this->DEFAULT_VALUE;
         this->entries--;
+        return true;
+    }
+
+    TValue* get_value(TKey key)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return new TValue();
+        }
+
+        return &this->table[index].value;
+    }
+    
+    bool contains(TKey key)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return false;
+        }
+
         return true;
     }
 };
