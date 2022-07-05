@@ -1,166 +1,151 @@
 #pragma once
+
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
-template <typename TKey, typename TValue>
-struct KeyValuePair
-{
-private:
-    TKey key;
-    TValue value;
-    KeyValuePair *next;
-    KeyValuePair(const KeyValuePair&);
-    KeyValuePair & operator=(const KeyValuePair&);
-public:
-    KeyValuePair(const TKey &key, const TValue &value) : key(key), value(value), next(NULL)
+template<class TKey, class TValue>
+class Map {
+ private:
+    struct KeyValuePair {
+        int index;
+        TKey key;
+        TValue value;
+    };
+
+    unsigned int entries = 0;
+    static const int MAX_SIZE = 100;
+    struct KeyValuePair DEFAULT_VALUE;
+    struct KeyValuePair table[MAX_SIZE];
+
+    int randon_number()
     {
+        return (rand() % MAX_SIZE);
     }
 
-    TKey get_key() const {
-        return this->key;
-    }
-
-    TValue get_value() const {
-        return this->value;
-    }
-
-    void set_value(TValue value)
+    int hash(TKey key)
     {
-        this->value = value;
-    }
-
-    KeyValuePair *get_next() const {
-        return this->next;
-    }
-
-    void set_next(KeyValuePair *next) {
-        this->next = next;
-    }
-};
-
-template <typename TKey, std::size_t tableSize>
-struct KeyHash {
-    unsigned long operator()(const TKey &key) const
-    {
-        return reinterpret_cast<unsigned long>(key) % tableSize;
-    }
-};
-
-template <typename TKey, typename TValue, std::size_t tableSize, typename F = KeyHash<TKey, tableSize>>
-class Map
-{
-private:
-    Map(const Map &other);
-    const Map & operator=(const Map &other);
-    KeyValuePair<TKey, TValue> *table[tableSize];
-    F hashFunc;
-public:
-    Map() : table(), hashFunc()
-    {
-    }
-
-    ~Map()
-    {
-        for (size_t i = 0; i < tableSize; ++i)
+        if (this->is_table_full())
         {
-            KeyValuePair<TKey, TValue> *entry = table[i];
-            while (entry != NULL)
+           return this->DEFAULT_VALUE.index;
+        }
+
+        int counter = 0;
+        int i = 1;
+        for (char& c : key)
+        {
+            counter += i++ * int(c);
+        }
+
+        return this->probe(counter, key);
+    }
+
+    int probe(const int counter, const TKey key)
+    {
+        int index = static_cast<int>(counter % MAX_SIZE);
+        while (this->table[index].index != this->DEFAULT_VALUE.index)
+        {
+            if (this->table[index].key == key)
             {
-                KeyValuePair<TKey, TValue> *prev = entry;
-                entry = entry->get_next();
-                delete prev;
+                return index;
             }
 
-            table[i] = NULL;
+            index = ++index % MAX_SIZE;
         }
+
+        return index;
     }
 
-    void add(const TKey &key, const TValue &value)
+    bool is_table_full()
     {
-        unsigned long hashValue = hashFunc(key);
-        KeyValuePair<TKey, TValue> *prev = NULL;
-        KeyValuePair<TKey, TValue> *entry = table[hashValue];
-
-        while (entry != NULL && entry->get_key() != key)
+        if (this->entries == MAX_SIZE)
         {
-            prev = entry;
-            entry = entry->get_next();
-        }
-
-        if (entry == NULL)
-        {
-            entry = new KeyValuePair<TKey, TValue>(key, value);
-            if (prev == NULL)
-            {
-                table[hashValue] = entry;
-                return;
-            }
-            
-            prev->set_next(entry);
-            return;
-        }
-
-        entry->set_value(value);
-    }
-
-    void remove(const TKey &key)
-    {
-        unsigned long hashValue = hashFunc(key);
-        KeyValuePair<TKey, TValue> *prev = NULL;
-        KeyValuePair<TKey, TValue> *entry = table[hashValue];
-
-        while (entry != NULL && entry->get_key() != key)
-        {
-            prev = entry;
-            entry = entry->get_next();
-        }
-
-        if (entry == NULL)
-        {
-            return;
-        }
-
-        if (prev == NULL)
-        {
-            table[hashValue] = entry->get_next();
-            return;
-        }
-
-        prev->set_next(entry->get_next());
-        delete entry;
-    }
-
-    bool get(const TKey &key, TValue &value)
-    {
-        unsigned long hashValue = hashFunc(key);
-        KeyValuePair<TKey, TValue> *entry = table[hashValue];
-        while (entry != NULL)
-        {
-            if (entry->get_key() == key)
-            {
-                value = entry->get_value();
-                return true;
-            }
-
-            entry = entry->get_next();
+            return true;
         }
 
         return false;
     }
 
-    bool contains_key(const TKey &key)
+ public:
+    Map()
     {
-        unsigned long hashValue = hashFunc(key);
-        KeyValuePair<TKey, TValue> *entry = table[hashValue];
-        while (entry != NULL)
+        this->DEFAULT_VALUE.index = -1;
+        srand(time(NULL));
+        for (auto& e : this->table)
         {
-            if (entry->get_key() == key)
-            {
-                return true;
-            }
+            e.index = this->DEFAULT_VALUE.index;
+        }
+    }
 
-            entry = entry->get_next();
+    TValue* get_value(TKey key)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return new TValue();
         }
 
-        return false;
+        return &this->table[index].value;
+    }
+    
+    bool contains(TKey key)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool add(TKey key, TValue value)
+    {
+        if (this->is_table_full())
+        {
+            std::cout << "Table full." << std::endl;
+            return false;
+        }
+
+        int index = this->hash(key);
+        if (this->table[index].key == key)
+        {
+            std::cout << "Key " << key << " already exist." << std::endl;
+            return false;
+        }
+
+        struct KeyValuePair* pair = new KeyValuePair();
+        pair->index = index;
+        pair->key = key;
+        pair->value = value;
+
+        this->table[index] = *pair;
+        this->entries++;
+        return true;
+    }
+
+    bool update(TKey key, TValue value)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return false;
+        }
+
+        this->table[index].value = value;
+        return true;
+    }
+
+    bool remove(TKey key)
+    {
+        int index = this->hash(key);
+        if (index == this->DEFAULT_VALUE.index)
+        {
+            return false;
+        }
+
+        this->table[index] = this->DEFAULT_VALUE;
+        this->entries--;
+        return true;
     }
 };
