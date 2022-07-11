@@ -12,7 +12,7 @@ TEST_CASE("add")
     map.add("State", "Minas Gerais");
     map.add("City", "Belo Horizonte");
 
-    bool contains = map.contains("Country");
+    bool contains = map.contains_key("Country");
     REQUIRE(contains);
 };
 
@@ -25,8 +25,8 @@ TEST_CASE("update")
     map.add("City", "Belo Horizonte");
     map.update("City", "London");
 
-    std::string* city = map.get_value("City");
-    REQUIRE(*(city) == "London");
+    std::string* value = map.get_value("City");
+    REQUIRE(*value == "London");
 };
 
 TEST_CASE("remove")
@@ -36,11 +36,9 @@ TEST_CASE("remove")
     map.add("Country", "Brazil");
     map.add("State", "Minas Gerais");
     map.add("City", "Belo Horizonte");
-    map.remove("Country");
 
-    bool contains = map.contains("Country");
-    std::string* country = map.get_value("Country");
-    REQUIRE(!contains);
+    bool remove = map.remove("Country");
+    REQUIRE(remove);
 };
 
 TEST_CASE("get_value")
@@ -51,8 +49,8 @@ TEST_CASE("get_value")
     map.add("State", "Minas Gerais");
     map.add("City", "Belo Horizonte");
 
-    std::string* city = map.get_value("City");
-    REQUIRE(*(city) == "Belo Horizonte");
+    std::string* value = map.get_value("City");
+    REQUIRE(*value == "Belo Horizonte");
 };
 
 TEST_CASE("contains")
@@ -63,6 +61,6 @@ TEST_CASE("contains")
     map.add("State", "Minas Gerais");
     map.add("City", "Belo Horizonte");
 
-    bool contains = map.contains("Country");
+    bool contains = map.contains_key("Country");
     REQUIRE(contains);
 };
