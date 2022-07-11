@@ -138,7 +138,7 @@ class Map {
         return &this->table[index].value;
     }
     
-    bool contains(TKey key)
+    bool contains_key(TKey key)
     {
         int index = this->hash(key);
         if (index == this->DEFAULT_VALUE.index)
