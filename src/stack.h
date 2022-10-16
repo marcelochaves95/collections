@@ -20,7 +20,7 @@ public:
 
     void push(const T& item)
     {
-        list.add(item);
+        this->list.add(item);
     }
 
     T& pop()
@@ -30,8 +30,8 @@ public:
             std::cout << "The stack is empty." << std::endl;
         }
 
-        T& item = list.last();
-        list.remove_last();
+        T item = this->list.last();
+        this->list.remove_at(0);
         return item;
     }
 
@@ -42,26 +42,26 @@ public:
             std::cout << "The stack is empty." << std::endl;
         }
 
-        return list.last();
+        return this->list.last();
     }
 
     bool contains(const T& item)
     {
-        return list.contains(item);
+        return this->list.contains(item);
     }
 
     bool is_empty() const
     {
-        return list.is_empty();
+        return this->list.is_empty();
     }
 
     int count() const
     {
-        return list.count();
+        return this->list.count();
     }
 
     void clear()
     {
-        list.clear();
+        this->list.clear();
     }
 };
