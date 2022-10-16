@@ -12,8 +12,8 @@ TEST_CASE("add")
     list.add(7);
     list.add(95);
 
-    bool contains = list.contains(7);
-    REQUIRE(contains);
+    bool secondIndex = list[1] == 7;
+    REQUIRE(secondIndex);
 };
 
 TEST_CASE("remove")
@@ -29,28 +29,16 @@ TEST_CASE("remove")
     REQUIRE(!contains);
 };
 
-TEST_CASE("remove_first")
+TEST_CASE("remove_at")
 {
     List<int> list;
 
     list.add(4);
     list.add(3);
-    list.remove_first();
+    list.remove_at(0);
 
     int first = list.first();
     REQUIRE(first == 3);
-};
-
-TEST_CASE("remove_last")
-{
-    List<int> list;
-
-    list.add(4);
-    list.add(3);
-    list.remove_last();
-
-    int last = list.last();
-    REQUIRE(last == 4);
 };
 
 TEST_CASE("contains")
@@ -63,6 +51,18 @@ TEST_CASE("contains")
 
     bool contains = list.contains("School");
     REQUIRE(contains);
+};
+
+TEST_CASE("index_of")
+{
+    List<std::string> list;
+
+    list.add("House");
+    list.add("School");
+    list.add("City");
+
+    int index = list.index_of("School");
+    REQUIRE(index == 1);
 };
 
 TEST_CASE("is_empty")
