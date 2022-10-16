@@ -20,7 +20,7 @@ public:
 
     void enqueue(const T& item)
     {
-        list.add(item);
+        this->list.add(item);
     }
 
     T& dequeue()
@@ -30,8 +30,8 @@ public:
             std::cout << "The queue is empty." << std::endl;
         }
 
-        T& item = list.first();
-        list.remove_first();
+        T item = this->list.first();
+        this->list.remove_at(0);
         return item;
     }
 
@@ -42,26 +42,26 @@ public:
             std::cout << "The queue is empty." << std::endl;
         }
 
-        return list.first();
+        return this->list.first();
     }
 
     bool contains(const T& item)
     {
-        return list.contains(item);
+        return this->list.contains(item);
     }
 
     bool is_empty() const
     {
-        return list.is_empty();
+        return this->list.is_empty();
     }
 
     int count() const
     {
-        return list.count();
+        return this->list.count();
     }
 
     void clear()
     {
-        list.clear();
+        this->list.clear();
     }
 };
