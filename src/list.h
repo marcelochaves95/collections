@@ -6,204 +6,116 @@ template<class T>
 class List
 {
 private:
-    template<typename TNode>
-    struct Node
-    {
-        TNode item;
-        Node *next;
+    int size;
+    int maxSize;
+    T *arrayholder;
 
-        Node(const TNode& item)
-        {
-            this->item = item;
-            this->next = NULL;
-        }
-    };
-
-    Node<T> *head;
-    Node<T> *tail;
-    int size = 0;
 public:
     List()
     {
-        head = NULL;
-        tail = NULL;
+        this->size = 0;
+        this->maxSize = 30;
+        this->arrayholder = new T[this->maxSize];
     }
 
     ~List()
     {
-        clear();
+        delete[] this->arrayholder;
+    }
+
+    int& operator[](int i)
+    {
+        return this->arrayholder[i];
     }
 
     void add(const T& item)
     {
-        if (is_empty())
+        if (this->maxSize < this->size + 1)
         {
-            head = new Node<T>(item);
-            tail = head;
-            size++;
+            this->maxSize *= 2;
+            T *temporaryArray = new T[this->maxSize];
+
+            for (std::size_t i = 0; i < this->size; i++)
+            {
+                temporaryArray[i] = this->arrayholder[i];
+            }
+
+            delete[] this->arrayholder;
+            this->arrayholder = temporaryArray;
+            this->arrayholder[this->size] = item;
+            this->size += 1;
             return;
         }
 
-        tail->next = new Node<T>(item);
-        tail = tail->next;
-        size++;
+        this->arrayholder[this->size] = item;
+        this->size += 1;
     }
 
     void remove(const T& item)
     {
-        if (is_empty())
+        int indexToRemove = this->index_of(item);
+        if (indexToRemove == -1)
         {
-            std::cout << "The list is empty." << std::endl;
             return;
         }
 
-        if (head == tail && item == head->item)
+        for (std::size_t i = indexToRemove; i < this->size; i++)
         {
-            delete head;
-            head = NULL;
-            tail = NULL;
-            size--;
-            return;
+            this->arrayholder[i] = this->arrayholder[i + 1];
         }
 
-        if (item == head->item)
-        {
-            Node<T> *temporary = head;
-            head = head->next;
-            delete temporary;
-            size--;
-            return;
-        }
-
-        Node<T> *previous = head;
-        Node<T> *temporary = head->next;
-        while (temporary != NULL && temporary->item != item)
-        {
-            previous = previous->next;
-            temporary = temporary->next;
-        }
-
-        if (temporary != NULL)
-        {
-            previous->next = temporary->next;
-            if (temporary == tail)
-            {
-                tail = previous;
-            }
-            size--;
-        }
-
-        delete temporary;
+        this->size -= 1;
     }
 
-    void remove_first()
+    void remove_at(const int index)
     {
-        if (is_empty())
-        {
-            std::cout << "The list is empty." << std::endl;
-            return;
-        }
-
-        if (head == tail)
-        {
-            head = NULL;
-            tail = NULL;
-            size--;
-            return;
-        }
-
-        head = head->next;
-        size--;
-    }
-
-    void remove_last()
-    {
-        if (head == tail)
-        {
-            delete head;
-            head = NULL;
-            tail = NULL;
-            size--;
-            return;
-        }
-
-        Node<T> *temporary = head;
-        while (temporary->next != tail)
-        {
-            temporary = temporary->next;
-        }
-
-        delete tail;
-        tail = temporary;
-        tail->next = NULL;
-        size--;
+        T& item = this->arrayholder[index];
+        this->remove(item);
     }
 
     bool contains(const T& item)
     {
-        if (is_empty())
-        {
-            std::cout << "The list is empty." << std::endl;
-            return false;
-        }
+        int index = this->index_of(item);
+        return index == -1 ? false : true;
+    }
 
-        Node<T> *temporary = head;
-        while (temporary != NULL)
+    int index_of(const T& item) const
+    {
+        for (std::size_t i = 0; i < this->size; i++)
         {
-            if (temporary->item == item)
+            if (this->arrayholder[i] == item)
             {
-                return true;
+                return i;
             }
-
-            temporary = temporary->next;
         }
 
-        return false;
+        return -1;
     }
 
     bool is_empty() const
     {
-        return head == NULL;
+        return this->size == 0;
     }
 
-    T& first()
+    T& first() const
     {
-        if (is_empty())
-        {
-            std::cout << "The list is empty." << std::endl;
-        }
-
-        return head->item;
+        return this->arrayholder[0];
     }
 
-    T& last()
+    T& last() const
     {
-        if (is_empty())
-        {
-            std::cout << "The list is empty." << std::endl;
-        }
-
-        return tail->item;
+        return this->arrayholder[this->size - 1];
     }
 
     int count() const
     {
-        if (is_empty())
-        {
-            return 0;
-        }
-
-        return size;
+        return this->size;
     }
 
     void clear()
     {
-        Node<T> *node;
-        while (!is_empty())
-        {
-            node = head->next;
-            delete head;
-            head = node;
-        }
+        std::fill_n(this->arrayholder, this->size, 0);
+        this->size = 0;
+        this->arrayholder = new T[maxSize];
     }
 };
