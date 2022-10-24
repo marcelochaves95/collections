@@ -8,24 +8,24 @@ class List
 private:
     int size;
     int maxSize;
-    T *arrayholder;
+    T *arrayHolder;
 
 public:
     List()
     {
         this->size = 0;
         this->maxSize = 30;
-        this->arrayholder = new T[this->maxSize];
+        this->arrayHolder = new T[this->maxSize];
     }
 
     ~List()
     {
-        delete[] this->arrayholder;
+        delete[] this->arrayHolder;
     }
 
     int& operator[](int i)
     {
-        return this->arrayholder[i];
+        return this->arrayHolder[i];
     }
 
     void add(const T& item)
@@ -37,17 +37,17 @@ public:
 
             for (std::size_t i = 0; i < this->size; i++)
             {
-                temporaryArray[i] = this->arrayholder[i];
+                temporaryArray[i] = this->arrayHolder[i];
             }
 
-            delete[] this->arrayholder;
-            this->arrayholder = temporaryArray;
-            this->arrayholder[this->size] = item;
+            delete[] this->arrayHolder;
+            this->arrayHolder = temporaryArray;
+            this->arrayHolder[this->size] = item;
             this->size += 1;
             return;
         }
 
-        this->arrayholder[this->size] = item;
+        this->arrayHolder[this->size] = item;
         this->size += 1;
     }
 
@@ -61,7 +61,7 @@ public:
 
         for (std::size_t i = indexToRemove; i < this->size; i++)
         {
-            this->arrayholder[i] = this->arrayholder[i + 1];
+            this->arrayHolder[i] = this->arrayHolder[i + 1];
         }
 
         this->size -= 1;
@@ -69,7 +69,7 @@ public:
 
     void remove_at(const int index)
     {
-        T& item = this->arrayholder[index];
+        T& item = this->arrayHolder[index];
         this->remove(item);
     }
 
@@ -83,7 +83,7 @@ public:
     {
         for (std::size_t i = 0; i < this->size; i++)
         {
-            if (this->arrayholder[i] == item)
+            if (this->arrayHolder[i] == item)
             {
                 return i;
             }
@@ -99,12 +99,12 @@ public:
 
     T& first() const
     {
-        return this->arrayholder[0];
+        return this->arrayHolder[0];
     }
 
     T& last() const
     {
-        return this->arrayholder[this->size - 1];
+        return this->arrayHolder[this->size - 1];
     }
 
     int count() const
@@ -114,8 +114,8 @@ public:
 
     void clear()
     {
-        std::fill_n(this->arrayholder, this->size, 0);
+        std::fill_n(this->arrayHolder, this->size, 0);
         this->size = 0;
-        this->arrayholder = new T[maxSize];
+        this->arrayHolder = new T[maxSize];
     }
 };
