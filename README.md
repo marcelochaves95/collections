@@ -1,2 +1,0 @@
-# Collections
-Generic data structures.
